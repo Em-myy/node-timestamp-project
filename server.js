@@ -11,13 +11,17 @@ server.get("/", (req, res) => {
   res.sendFile(absoluteHtmlFile);
 });
 
+server.get("/api/", (req, res) => {
+  const currentDate = new Date();
+
+  res.json({ unix: currentDate.getTime(), utc: currentDate.toUTCString() });
+});
+
 server.get("/api/:date", (req, res) => {
   let dateString = req.params.date;
   let date;
 
-  if (!dateString) {
-    date = new Date();
-  } else if (!isNaN(dateString)) {
+  if (!isNaN(dateString)) {
     // Numeric input → detect if seconds or milliseconds
     date =
       dateString.length === 10
