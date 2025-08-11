@@ -8,28 +8,23 @@ server.get("/", (req, res) => {
   res.sendFile(absoluteHtmlFile);
 });
 
-server.get("/api/", (req, res) => {
-  const currentDate = new Date();
-
-  res.json({ unix: currentDate.getTime(), utc: currentDate.toUTCString() });
-});
-
-server.get("/api/:id", (req, res) => {
-  const input = req.params.id;
+server.get("/api/:date", (req, res) => {
+  let dateString = req.params.date;
   let date;
 
-  const numInput = Number(input);
-
-  if (!isNaN(numInput) && input.trim() !== "") {
+  if (!dateString) {
+    date = new Date();
+  } else if (!isNaN(dateString)) {
+    // Numeric input → detect if seconds or milliseconds
     date =
-      numInput.toString().length === 10
-        ? new Date(numInput * 1000) // seconds → ms
-        : new Date(numInput);
+      dateString.length === 10
+        ? new Date(parseInt(dateString) * 1000) // seconds
+        : new Date(parseInt(dateString)); // milliseconds
   } else {
-    date = new Date(input);
+    date = new Date(dateString);
   }
 
-  if (isNaN(date.getTime())) {
+  if (date.toString() === "Invalid Date") {
     return res.json({ error: "Invalid Date" });
   }
 
