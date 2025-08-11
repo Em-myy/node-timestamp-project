@@ -1,8 +1,12 @@
 const express = require("express");
+var cors = require("cors");
+app.use(cors({ optionsSuccessStatus: 200 }));
 
 const server = express();
 
 absoluteHtmlFile = __dirname + "/views/index.html";
+
+app.use(cors({ optionsSuccessStatus: 200 }));
 
 server.get("/", (req, res) => {
   res.sendFile(absoluteHtmlFile);
