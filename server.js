@@ -21,7 +21,10 @@ server.get("/api/:id", (req, res) => {
   const numInput = Number(input);
 
   if (!isNaN(numInput) && input.trim() !== "") {
-    date = new Date(numInput);
+    date =
+      numInput.toString().length === 10
+        ? new Date(numInput * 1000) // seconds → ms
+        : new Date(numInput);
   } else {
     date = new Date(input);
   }
